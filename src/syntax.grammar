@@ -1,26 +1,205 @@
-@top Program { expression* }
+@precedence { func_invoke, ident }
+
+@top Statements { statement* }
 
 @skip { space | LineComment }
 
-expression {
-  Identifier |
-  String |
-  Boolean |
-  Application { "(" expression* ")" }
+kw<term> { @specialize[@name={term}]<Identifier, term> }
+
+statement {
+  object |
+  camera |
+  config |
+  var_assign |
+  if |
+  while |
+  break |
+  continue |
+  expr
 }
 
+camera {
+  kw<"Camera"> "{"
+    (
+      ("lookfrom" ":" (vector | Identifier) ",") |
+      ("lookat" ":" (vector | Identifier) ",") |
+      ("up" ":" (vector | Identifier) ",") |
+      ("angle" ":" expr ",") |
+      ("dist_to_focus" ":" expr ",")
+    )*
+  "}"
+}
+
+config {
+  kw<"Config"> "{"
+    (
+      ("width" ":" expr ",") |
+      ("height" ":" expr ",") |
+      ("samples_per_pixel" ":" expr ",") |
+      ("max_depth" ":" expr ",") |
+      ("background" ":" (vector | Identifier) ",")
+    )*
+  "}"
+}
+
+var_assign { Identifier "=" expr ";" }
+
+if { kw<"if"> expr "{" statement* "}" (kw<"else"> (("{" statement* "}") | if))? }
+
+while { kw<"while"> expr "{" statement* "}" }
+
+break { kw<"break"> ";" }
+
+continue { kw<"continue"> ";" }
+
+object { sphere | box | plane | objects }
+
+sphere { 
+    kw<"Sphere"> "{"
+      (
+        (kw<"center"> ":" (vector | Identifier) "," ) |
+        (kw<"radius"> ":" expr "," ) |
+        (kw<"material"> ":" material ",") |
+        affine
+      )*
+    "}"
+}
+
+box {
+ kw<"Box"> "{"
+    (
+      (kw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (kw<"material"> ":" material ",") |
+      affine
+    )*
+  "}"
+}
+
+plane {
+  kw<"Plane"> "{"
+    (
+      (kw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (kw<"material"> ":" material ",") |
+      affine
+    )*
+  "}"
+}
+
+objects { kw<"Objs"> "{" object+ affine* "}" }
+
+affine {
+  (kw<"translate"> ":" (vector | Identifier) "," ) |
+  (kw<"rotateX"> ":" expr "," ) |
+  (kw<"rotateY"> ":" expr "," ) |
+  (kw<"rotateZ"> ":" expr "," )
+}
+
+material { metal | dielectric | lambertian | light }
+
+metal { kw<"Metal"> "(" ( vector | Identifier ) "," expr ")" }
+
+dielectric { kw<"Dielectric"> | "(" | expr | ")" }
+
+lambertian { kw<"Lambertian"> | "(" texture ")" }
+
+light { kw<"Light"> | "(" (vector | Identifier) "," expr ")" }
+
+texture { perlin | checker | solid }
+
+perlin { kw<"Perlin"> "(" expr ")" }
+
+checker { kw<"Checker"> "(" texture "," texture ")" }
+
+solid { kw<"Solid"> "(" (vector | Identifier) ")" }
+
+expr { num_expr | cond }
+
+cond {
+  num_expr
+  ("||" | "&&" | "<=" | ">=" | Lt | Gt | "==" | "!=") 
+  num_expr
+}
+
+num_expr {
+  term (("+" | "-") term)*
+}
+
+term {
+  factor (("*" | Div) factor)*
+}
+
+factor {
+  Number |
+  vector |
+  !func_invoke func |
+  !ident Identifier |
+  not_factor |
+  ("(" expr ")")
+}
+
+func {
+  Identifier "(" (expr ("," expr)*)? ")"
+}
+
+not_factor { "!" factor }
+
+vector { VectorStart expr "," expr "," expr VectorEnd }
+
 @tokens {
-  Identifier { $[a-zA-Z_\-0-9]+ }
+  Number { @digit+ ("." @digit+)? }
 
-  String { '"' (!["\\] | "\\" _)* '"' }
+  Char { $[a-zA-Z_] }
+  Identifier { Char (Char | @digit)* }
 
-  Boolean { "#t" | "#f" }
+  LineComment { "//" ![\n]* }
 
-  LineComment { ";" ![\n]* }
+  Div { "/" }
+
+  @precedence { LineComment, Div }
 
   space { $[ \t\n\r]+ }
 
-  "(" ")"
-}
+  "(" ")" "{" "}"
 
-@detectDelim
+  @precedence { VectorStart, Lt }
+  Lt { "<" }
+  VectorStart { "<" }
+
+  @precedence { VectorEnd, Gt }
+  Gt { ">" }
+  VectorEnd { ">" }
+
+  "Sphere"
+  "Box"
+  "Plane"
+  "Objs"
+
+  "Lambertian"
+  "Metal"
+  "Dielectric"
+  "Light"
+
+  "Solid"
+  "Checker"
+  "Perlin"
+
+  // properties
+  "center"
+  "radius"
+  "vertex"
+  "material"
+  "translate"
+  "rotateX"
+  "rotateY"
+  "rotateZ"
+
+  "Camera"
+  "Config"
+
+  "break"
+  "continue"
+
+  "if"
+  "else"
+  "while"
+}
