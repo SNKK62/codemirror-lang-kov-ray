@@ -34,13 +34,13 @@ const KOVRayLanguage = language.LRLanguage.define({
             //   Application: foldInside
             // }),
             highlight.styleTags({
-                Identifier: highlight.tags.content,
+                Identifier: highlight.tags.attributeValue,
                 Number: highlight.tags.number,
                 LineComment: highlight.tags.lineComment,
                 "( )": highlight.tags.paren,
                 "{ }": highlight.tags.brace,
-                "Camera": highlight.tags.meta,
-                "Config": highlight.tags.meta,
+                "Camera": highlight.tags.keyword,
+                "Config": highlight.tags.keyword,
                 // object
                 "Sphere": highlight.tags.labelName,
                 "Box": highlight.tags.labelName,
