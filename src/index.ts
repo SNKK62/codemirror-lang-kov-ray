@@ -12,7 +12,7 @@ export const KOVRayLanguage = LRLanguage.define({
       //   Application: foldInside
       // }),
       styleTags({
-        Identifier: t.name,
+        Identifier: t.macroName,
         Number: t.number,
         LineComment: t.lineComment,
         "( )": t.paren,
@@ -36,14 +36,14 @@ export const KOVRayLanguage = LRLanguage.define({
         VectorStart: t.angleBracket,
         VectorEnd: t.angleBracket,
         // property names
-        "center": t.attributeName,
-        "radius": t.attributeName,
-        "vertex": t.attributeName,
-        "material": t.attributeName,
-        "translate": t.attributeName,
-        "rotateX": t.attributeName,
-        "rotateY": t.attributeName,
-        "rotateZ": t.attributeName,
+        "center": t.moduleKeyword,
+        "radius": t.moduleKeyword,
+        "vertex": t.moduleKeyword,
+        "material": t.moduleKeyword,
+        "translate": t.moduleKeyword,
+        "rotateX": t.moduleKeyword,
+        "rotateY": t.moduleKeyword,
+        "rotateZ": t.moduleKeyword,
         // keywords
         "Camera": t.keyword,
         "Config": t.keyword,
@@ -51,7 +51,7 @@ export const KOVRayLanguage = LRLanguage.define({
         "continue": t.keyword,
         "if": t.keyword,
         "else": t.keyword,
-        "where": t.keyword,
+        "while": t.keyword,
 
       })
     ]
