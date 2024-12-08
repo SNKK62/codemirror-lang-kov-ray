@@ -30,13 +30,13 @@ const KOVRayLanguage = LRLanguage.define({
             //   Application: foldInside
             // }),
             styleTags({
-                Identifier: tags.literal,
+                Identifier: tags.content,
                 Number: tags.number,
                 LineComment: tags.lineComment,
                 "( )": tags.paren,
                 "{ }": tags.brace,
-                "Camera": tags.keyword,
-                "Config": tags.keyword,
+                "Camera": tags.meta,
+                "Config": tags.meta,
                 // object
                 "Sphere": tags.labelName,
                 "Box": tags.labelName,
