@@ -58,7 +58,7 @@ sphere {
     Sphere "{"
       (
         (Center ":" (vector | Identifier) "," ) |
-        (kw<"radius"> ":" expr "," ) |
+        (Radius ":" expr "," ) |
         (Material ":" material ",") |
         affine
       )*
@@ -192,7 +192,7 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
 
   @precedence {
     Center,
-    // Radius,
+    Radius,
     Vertex,
     Material,
     Translate,
@@ -214,7 +214,7 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
 
   // properties
   Center {"center"}
-  // Radius {"radius"}
+  Radius {"radius"}
   Vertex {"vertex"}
   Material {"material"}
   Translate {"translate"}
