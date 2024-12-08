@@ -19,25 +19,25 @@ statement {
 }
 
 camera {
-  kw<"Camera"> "{"
+  Camera "{"
     (
-      ("lookfrom" ":" (vector | Identifier) ",") |
-      ("lookat" ":" (vector | Identifier) ",") |
-      ("up" ":" (vector | Identifier) ",") |
-      ("angle" ":" expr ",") |
-      ("dist_to_focus" ":" expr ",")
+      (Lookfrom ":" (vector | Identifier) ",") |
+      (LookAt ":" (vector | Identifier) ",") |
+      (Up ":" (vector | Identifier) ",") |
+      (Angle ":" expr ",") |
+      (DistToFocus ":" expr ",")
     )*
   "}"
 }
 
 config {
-  kw<"Config"> "{"
+  Config "{"
     (
-      ("width" ":" expr ",") |
-      ("height" ":" expr ",") |
-      ("samples_per_pixel" ":" expr ",") |
-      ("max_depth" ":" expr ",") |
-      ("background" ":" (vector | Identifier) ",")
+      (Width ":" expr ",") |
+      (Height ":" expr ",") |
+      (SamplesPerPixel ":" expr ",") |
+      (MaxDepth ":" expr ",") |
+      (Background ":" (vector | Identifier) ",")
     )*
   "}"
 }
@@ -55,62 +55,62 @@ continue { kw<"continue"> ";" }
 object { sphere | box | plane | objects }
 
 sphere { 
-    kw<"Sphere"> "{"
+    Sphere "{"
       (
-        (kw<"center"> ":" (vector | Identifier) "," ) |
-        (kw<"radius"> ":" expr "," ) |
-        (kw<"material"> ":" material ",") |
+        (Center ":" (vector | Identifier) "," ) |
+        (Radius ":" expr "," ) |
+        (Material ":" material ",") |
         affine
       )*
     "}"
 }
 
 box {
- kw<"Box"> "{"
+ Box "{"
     (
-      (kw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
-      (kw<"material"> ":" material ",") |
+      (Vertex ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (Material ":" material ",") |
       affine
     )*
   "}"
 }
 
 plane {
-  kw<"Plane"> "{"
+  Plane "{"
     (
-      (kw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
-      (kw<"material"> ":" material ",") |
+      (Vertex ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (Material ":" material ",") |
       affine
     )*
   "}"
 }
 
-objects { kw<"Objs"> "{" object+ affine* "}" }
+objects { Objs "{" object+ affine* "}" }
 
 affine {
-  (kw<"translate"> ":" (vector | Identifier) "," ) |
-  (kw<"rotateX"> ":" expr "," ) |
-  (kw<"rotateY"> ":" expr "," ) |
-  (kw<"rotateZ"> ":" expr "," )
+  (Translate ":" (vector | Identifier) "," ) |
+  (RotateX ":" expr "," ) |
+  (RotateY ":" expr "," ) |
+  (RotateZ ":" expr "," )
 }
 
 material { metal | dielectric | lambertian | light }
 
-metal { kw<"Metal"> "(" ( vector | Identifier ) "," expr ")" }
+metal { Metal "(" ( vector | Identifier ) "," expr ")" }
 
-dielectric { kw<"Dielectric"> | "(" | expr | ")" }
+dielectric { Dielectric | "(" | expr | ")" }
 
-lambertian { kw<"Lambertian"> | "(" texture ")" }
+lambertian { Lambertian | "(" texture ")" }
 
-light { kw<"Light"> | "(" (vector | Identifier) "," expr ")" }
+light { Light | "(" (vector | Identifier) "," expr ")" }
 
 texture { perlin | checker | solid }
 
-perlin { kw<"Perlin"> "(" expr ")" }
+perlin { Perlin "(" expr ")" }
 
-checker { kw<"Checker"> "(" texture "," texture ")" }
+checker { Checker "(" texture "," texture ")" }
 
-solid { kw<"Solid"> "(" (vector | Identifier) ")" }
+solid { Solid "(" (vector | Identifier) ")" }
 
 expr { num_expr | cond }
 
@@ -169,39 +169,68 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
   Gt { ">" }
   VectorEnd { ">" }
 
-  "Sphere"
-  "Box"
-  "Plane"
-  "Objs"
+  @precedence {Camera, Config, Identifier}
+  Camera {"Camera"}
+  Config {"Config"}
 
-  "Lambertian"
-  "Metal"
-  "Dielectric"
-  "Light"
+  @precedence {Sphere, Box, Plane, Objs, Identifier}
+  Sphere {"Sphere"}
+  Box {"Box"}
+  Plane {"Plane"}
+  Objs {"Objs"}
 
-  "Solid"
-  "Checker"
-  "Perlin"
+  @precedence {Lambertian, Metal, Dielectric, Light, Identifier}
+  Lambertian {"Lambertian"}
+  Metal {"Metal"}
+  Dielectric {"Dielectric"}
+  Light {"Light"}
+
+  @precedence {Solid, Checker, Perlin, Identifier}
+  Solid {"Solid"}
+  Checker {"Checker"}
+  Perlin {"Perlin"}
+
+  @precedence {
+    Center,
+    Radius,
+    Vertex,
+    Material,
+    Translate,
+    RotateX,
+    RotateY,
+    RotateZ,
+    Lookfrom,
+    LookAt,
+    Up,
+    Angle,
+    DistToFocus,
+    Width,
+    Height,
+    SamplesPerPixel,
+    MaxDepth,
+    Background,
+    Identifier
+  }
 
   // properties
-  "center"
-  "radius"
-  "vertex"
-  "material"
-  "translate"
-  "rotateX"
-  "rotateY"
-  "rotateZ"
-  "lookfrom"
-  "lookat"
-  "up"
-  "angle"
-  "dist_to_focus"
-  "width"
-  "height"
-  "samples_per_pixel"
-  "max_depth"
-  "background"
+  Center {"center"}
+  Radius {"radius"}
+  Vertex {"vertex"}
+  Material {"material"}
+  Translate {"translate"}
+  RotateX {"rotateX"}
+  RotateY {"rotateY"}
+  RotateZ {"rotateZ"}
+  Lookfrom {"lookfrom"}
+  LookAt {"lookat"}
+  Up {"up"}
+  Angle {"angle"}
+  DistToFocus {"dist_to_focus"}
+  Width {"width"}
+  Height {"height"}
+  SamplesPerPixel {"samples_per_pixel"}
+  MaxDepth {"max_depth"}
+  Background {"background"}
 
   "break"
   "continue"
