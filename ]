@@ -209,4 +209,3 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
   "if"
   "else"
   "while"
-}
