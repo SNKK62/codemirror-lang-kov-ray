@@ -191,6 +191,7 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
   Perlin {"Perlin"}
 
   @precedence {
+    Identifier,
     Center,
     Radius,
     Vertex,
@@ -208,8 +209,7 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
     Height,
     SamplesPerPixel,
     MaxDepth,
-    Background,
-    Identifier
+    Background
   }
 
   // properties
