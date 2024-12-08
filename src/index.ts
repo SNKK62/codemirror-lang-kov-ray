@@ -39,7 +39,7 @@ export const KOVRayLanguage = LRLanguage.define({
         VectorEnd: t.angleBracket,
         // property names
         Center: t.macroName,
-        Radius: t.macroName,
+        "radius": t.macroName,
         Vertex: t.macroName,
         Material: t.macroName,
         Translate: t.macroName,

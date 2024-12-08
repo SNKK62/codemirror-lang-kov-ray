@@ -58,7 +58,7 @@ sphere {
     Sphere "{"
       (
         (Center ":" (vector | Identifier) "," ) |
-        (Radius ":" expr "," ) |
+        (kw<"radius"> ":" expr "," ) |
         (Material ":" material ",") |
         affine
       )*
@@ -191,9 +191,8 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
   Perlin {"Perlin"}
 
   @precedence {
-    Identifier,
     Center,
-    Radius,
+    // Radius,
     Vertex,
     Material,
     Translate,
@@ -209,12 +208,13 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
     Height,
     SamplesPerPixel,
     MaxDepth,
-    Background
+    Background,
+    Identifier
   }
 
   // properties
   Center {"center"}
-  Radius {"radius"}
+  // Radius {"radius"}
   Vertex {"vertex"}
   Material {"material"}
   Translate {"translate"}
