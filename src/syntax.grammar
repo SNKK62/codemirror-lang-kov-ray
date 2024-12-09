@@ -6,6 +6,8 @@
 
 kw<term> { @specialize[@name={term}]<Identifier, term> }
 
+ckw<term> { @extend[@name={term}]<Identifier, term> }
+
 statement {
   object |
   camera |
@@ -21,11 +23,11 @@ statement {
 camera {
   Camera "{"
     (
-      (Lookfrom ":" (vector | Identifier) ",") |
-      (LookAt ":" (vector | Identifier) ",") |
-      (Up ":" (vector | Identifier) ",") |
-      (Angle ":" expr ",") |
-      (DistToFocus ":" expr ",")
+      (ckw<"lookfrom"> ":" (vector | Identifier) ",") |
+      (ckw<"lookat"> ":" (vector | Identifier) ",") |
+      (ckw<"up"> ":" (vector | Identifier) ",") |
+      (ckw<"angle"> ":" expr ",") |
+      (ckw<"dist_to_focus"> ":" expr ",")
     )*
   "}"
 }
@@ -33,11 +35,11 @@ camera {
 config {
   Config "{"
     (
-      (Width ":" expr ",") |
-      (Height ":" expr ",") |
-      (SamplesPerPixel ":" expr ",") |
-      (MaxDepth ":" expr ",") |
-      (Background ":" (vector | Identifier) ",")
+      (ckw<"width"> ":" expr ",") |
+      (ckw<"height"> ":" expr ",") |
+      (ckw<"samples_per_pixel"> ":" expr ",") |
+      (ckw<"max_depth"> ":" expr ",") |
+      (ckw<"background"> ":" (vector | Identifier) ",")
     )*
   "}"
 }
@@ -57,9 +59,9 @@ object { sphere | box | plane | objects }
 sphere { 
     Sphere "{"
       (
-        (Center ":" (vector | Identifier) "," ) |
-        (Radius ":" expr "," ) |
-        (Material ":" material ",") |
+        (ckw<"center"> ":" (vector | Identifier) "," ) |
+        (ckw<"radius"> ":" expr "," ) |
+        (ckw<"material"> ":" material ",") |
         affine
       )*
     "}"
@@ -68,8 +70,8 @@ sphere {
 box {
  Box "{"
     (
-      (Vertex ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
-      (Material ":" material ",") |
+      (ckw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (ckw<"material"> ":" material ",") |
       affine
     )*
   "}"
@@ -78,8 +80,8 @@ box {
 plane {
   Plane "{"
     (
-      (Vertex ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
-      (Material ":" material ",") |
+      (ckw<"vertex"> ":" "(" (vector | Identifier) "," (vector | Identifier) ")" "," ) |
+      (ckw<"material"> ":" material ",") |
       affine
     )*
   "}"
@@ -88,10 +90,10 @@ plane {
 objects { Objs "{" object+ affine* "}" }
 
 affine {
-  (Translate ":" (vector | Identifier) "," ) |
-  (RotateX ":" expr "," ) |
-  (RotateY ":" expr "," ) |
-  (RotateZ ":" expr "," )
+  (ckw<"translate"> ":" (vector | Identifier) "," ) |
+  (ckw<"rotateX"> ":" expr "," ) |
+  (ckw<"rotateY"> ":" expr "," ) |
+  (ckw<"rotateZ"> ":" expr "," )
 }
 
 material { metal | dielectric | lambertian | light }
@@ -189,48 +191,6 @@ vector { VectorStart expr "," expr "," expr VectorEnd }
   Solid {"Solid"}
   Checker {"Checker"}
   Perlin {"Perlin"}
-
-  @precedence {
-    Center,
-    Radius,
-    Vertex,
-    Material,
-    Translate,
-    RotateX,
-    RotateY,
-    RotateZ,
-    Lookfrom,
-    LookAt,
-    Up,
-    Angle,
-    DistToFocus,
-    Width,
-    Height,
-    SamplesPerPixel,
-    MaxDepth,
-    Background,
-    Identifier
-  }
-
-  // properties
-  Center {"center"}
-  Radius {"radius"}
-  Vertex {"vertex"}
-  Material {"material"}
-  Translate {"translate"}
-  RotateX {"rotateX"}
-  RotateY {"rotateY"}
-  RotateZ {"rotateZ"}
-  Lookfrom {"lookfrom"}
-  LookAt {"lookat"}
-  Up {"up"}
-  Angle {"angle"}
-  DistToFocus {"dist_to_focus"}
-  Width {"width"}
-  Height {"height"}
-  SamplesPerPixel {"samples_per_pixel"}
-  MaxDepth {"max_depth"}
-  Background {"background"}
 
   "break"
   "continue"
