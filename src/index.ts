@@ -12,7 +12,7 @@ export const KOVRayLanguage = LRLanguage.define({
       //   Application: foldInside
       // }),
       styleTags({
-        Identifier: t.modifier,
+        Identifier: t.string,
         Number: t.number,
         LineComment: t.lineComment,
         "( )": t.paren,
@@ -38,7 +38,7 @@ export const KOVRayLanguage = LRLanguage.define({
         VectorStart: t.angleBracket,
         VectorEnd: t.angleBracket,
         // property names
-        "center radius vertex material translate rotateX rotateY rotateZ lookfrom lookat up angle dist_to_focus width height samples_per_pixel max_depth background": t.attributeValue,
+        "center radius vertex material translate rotateX rotateY rotateZ lookfrom lookat up angle dist_to_focus width height samples_per_pixel max_depth background": t.name,
         // keywords
         "if": t.keyword,
         "else": t.keyword,
